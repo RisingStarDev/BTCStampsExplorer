@@ -23,11 +23,13 @@ export default function StampCodeModal(
     formatted.split("\n").forEach((line) => {
       line = line.trim();
       if (line.match(/^<\//) && indent > 0) {
-        indent -= 2;
+        indent -= 3; // Decrease indent for closing tags
       }
-      result += " ".repeat(indent) + line + "\n";
+      if (line) {
+        result += " ".repeat(indent) + line + "\n"; // Add line with current indent
+      }
       if (line.match(/^<[^/]/) && !line.match(/\/>/)) {
-        indent += 2;
+        indent += 2; // Increase indent for opening tags
       }
     });
 
@@ -36,38 +38,13 @@ export default function StampCodeModal(
 
   return (
     <div
-      class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-[#181818] bg-opacity-50 backdrop-filter backdrop-blur-sm"
+      class="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-[#0b0b0b] bg-opacity-95 backdrop-filter backdrop-blur-sm"
       onClick={handleCloseModal}
     >
-      <div class="relative p-4 w-4/5 h-auto">
-        <div class="relative bg-white rounded-lg shadow overflow-hidden">
-          <div class="flex flex-col gap-4 items-center justify-between p-4 tablet:p-5 rounded-t">
-            <button
-              onClick={toggleModal}
-              type="button"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-              data-modal-hide="default-modal"
-            >
-              <svg
-                class="w-3 h-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 14"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                />
-              </svg>
-              <span class="sr-only">Close modal</span>
-            </button>
-            <pre class="text-sm text-gray-800 whitespace-pre-wrap break-words">
-              <code>{formattedSrc}</code>
-            </pre>
+      <div class="relative max-w-[800px] max-h-[800px] h-[calc(100vh-24px)] p-6 mobileLg:p-12 overflow-hidden">
+        <div class="flex flex-col p-6 mobileMd:p-9 rounded-md bg-[#FAFAFA] h-full overflow-hidden">
+          <div class="flex flex-col max-w-full h-full text-xs text-stamp-grey-darkest leading-tight overflow-y-auto overflow-x-auto">
+            <code class="whitespace-pre-wrap">{formattedSrc}</code>
           </div>
         </div>
       </div>
