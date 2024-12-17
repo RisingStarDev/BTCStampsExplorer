@@ -28,7 +28,7 @@ const VARIANT_STYLES = {
   submit:
     "inline-flex items-center justify-center w-7 h-7 mobileLg:w-9 mobileLg:h-9 bg-stamp-purple border-2 border-stamp-purple rounded-md text-sm mobileLg:text-base font-extrabold text-black tracking-[0.05em] px-4 mobileLg:px-5 hover:border-stamp-purple-highlight hover:bg-stamp-purple-highlight transition-colors disabled:bg-stamp-purple-darker disabled:text-black disabled:cursor-not-allowed",
   icon:
-    "flex justify-center items-center w-7 h-7 mobileLg:w-9 mobileLg:h-9 bg-stamp-purple rounded-md p-0 cursor-pointer border-2 border-[#8800CC]",
+    "flex justify-center items-center w-7 h-7 mobileLg:w-9 mobileLg:h-9 bg-stamp-purple rounded-md p-0 cursor-pointer border-2 border-[#8800CC] hover:border-stamp-purple-bright",
 };
 
 export function Button({
@@ -52,7 +52,7 @@ export function Button({
           <img
             src={icon}
             alt={iconAlt || ""}
-            className="w-[14px] h-[14px] mobileLg:w-[18px] mobileLg:h-[18px]"
+            className="w-[14px] h-[14px] mobileLg:w-[18px] mobileLg:h-[18px)"
           />
         )
         : isSubmitting
