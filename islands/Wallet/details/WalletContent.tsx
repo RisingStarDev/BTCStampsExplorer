@@ -423,6 +423,7 @@ export default function WalletContent({
   const [openSettingModal, setOpenSettingModal] = useState<boolean>(false);
 
   const { updateURL } = useURLUpdate();
+  const [isStampsRefreshing, setIsStampsRefreshing] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
@@ -447,8 +448,24 @@ export default function WalletContent({
   useEffect(() => {
     const url = new URL(globalThis.location.href);
     const params = new URLSearchParams(url.search);
+    const stampsPage = params.get('stamps_page');
+    const stampsLimit = params.get('stamps_limit');
     const src20Page = params.get('src20_page');
     const src20Limit = params.get('src20_limit');
+
+    if (stampsPage && stampsLimit && !isStampsRefreshing) {
+      const page = parseInt(stampsPage, 10);
+      const limit = parseInt(stampsLimit, 10);
+
+      if (page !== stamps.pagination.page || limit !== stamps.pagination.limit) {
+        setIsStampsRefreshing(true);
+        updateURL({
+          stamps_page: page.toString(),
+          stamps_limit: limit.toString(),
+          anchor: "stamps"
+        });
+      }
+    }
 
     if (src20Page && src20Limit && !isRefreshing) {
       const page = parseInt(src20Page, 10);
@@ -463,11 +480,15 @@ export default function WalletContent({
         });
       }
     }
-  }, [globalThis.location.search, src20.pagination, isRefreshing]);
+  }, [globalThis.location.search, stamps.pagination, src20.pagination, isStampsRefreshing, isRefreshing]);
 
   useEffect(() => {
     setIsRefreshing(false);
   }, [src20.data]);
+
+  useEffect(() => {
+    setIsStampsRefreshing(false);
+  }, [stamps.data]);
 
   const handleOpenSettingModal = () => {
     setOpenSettingModal(!openSettingModal);
@@ -521,6 +542,15 @@ export default function WalletContent({
     });
   };
 
+  const handleStampsPageChange = (page: number) => {
+    setIsStampsRefreshing(true);
+    updateURL({
+      stamps_page: page.toString(),
+      stamps_limit: stamps.pagination.limit.toString(),
+      anchor: "stamps"
+    });
+  };
+
   const stampSection = {
     title: "", // Empty title means no header
     type: "all",
@@ -548,6 +578,7 @@ export default function WalletContent({
       pageSize: stamps.pagination.limit,
       total: stamps.pagination.total,
       prefix: "stamps",
+      onPageChange: handleStampsPageChange,
     },
   };
 

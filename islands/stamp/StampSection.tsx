@@ -154,6 +154,7 @@ export default function StampSection({
               data_length={pagination.total}
               pages={Math.ceil(pagination.total / pagination.pageSize)}
               prefix={pagination.prefix}
+              onPageChange={pagination.onPageChange}
             />
           </div>
         )
